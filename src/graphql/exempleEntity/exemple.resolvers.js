@@ -13,7 +13,6 @@
 //   },
 // }
 import ExempleObject from '../../models/exempleObject.model'
-// import errors from './exemple.errors'
 // import mongoose from 'mongoose'
 
 export default {

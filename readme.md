@@ -85,7 +85,7 @@ But even with Async/Await, handling error is not that simple : read these posts 
 As this boilerplate uses graphql-yoga which is a layer on top of Apollo, you need to understand that graphql and Apollo handle add also specificities for handling errors : read this helping [post](https://blog.apollographql.com/full-stack-error-handling-with-graphql-apollo-5c12da407210) from Apollo
 
 In each entity folder for graphql, you can create your own exceptions (see ExempleObject model : the exemple.errors.js file) and use it in the resolvers file.
-The exemple uses [apollo-error](https://www.npmjs.com/package/apollo-errors).
+There is [apollo-error](https://www.npmjs.com/package/apollo-errors).
 
 But it may be better to use apollo-server-errors with the help of this [post](https://blog.apollographql.com/full-stack-error-handling-with-graphql-apollo-5c12da407210) because apollo-server-errors exposes a set of classes and functions (see the [doc on github](https://github.com/apollographql/apollo-server/blob/master/packages/apollo-server-errors/src/index.ts)) and make it possible to use [extensions code](https://www.apollographql.com/docs/apollo-server/features/errors#codes). It is the package usedd by apollo but not exposed by graphql-yoga(read this [issue](https://github.com/prisma/graphql-yoga/issues/167)).
 You can use the class Error to create an error.
@@ -102,6 +102,23 @@ Classes that extend ApolloError class:
 - UserInputError (class(message: String, properties?))
 - PersistedQueryNotFoundError (?) (class())
 - PersistedQueryNotSupportedError (?) (class())
+
+**Note**: in order to avoid 'new invokation' problem for apollo-server-errors classes, we had to configure .babelrc like that :
+
+    {
+      "presets": [
+        [
+          "env",
+          {
+            "targets": {
+              "node": "current"
+            }
+          }
+        ],
+      ]
+    }
+
+Read this [issue](https://github.com/apollographql/apollo-server/issues/1304#issuecomment-405072540).
 
 **Tip** : mongoose functions on model like findOne or findOneAndUpdate... let you give a callback function that can handle errors while requesting models and database. But when you throw an error in the callback, the app will crash because of an unhandled 'error' event : so you have to handle the error in the code that call the function
 (use `try` `catch`) or throw manually an error.

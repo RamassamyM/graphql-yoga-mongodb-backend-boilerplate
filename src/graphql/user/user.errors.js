@@ -1,12 +1,17 @@
-export default {
-  WrongCredentialsError: () => {
-    new Error('WrongCredentialsError', {
-      message: 'The provided credentials are invalid.',
-    })
-  },
-  EmailError: () => {
-    new Error('EmailError', {
-      message: 'There was a problem with your email.',
-    })
-  },
+import { ApolloError } from 'apollo-server-errors'
+
+export class WrongCredentialsError extends ApolloError {
+  constructor() {
+    super('WrongCredentialsError', 'CREDENTIALS_ERROR',
+          { message: 'The provided credentials are invalid.' }
+    )
+  }
+}
+
+export class EmailError extends ApolloError {
+  constructor() {
+    super('EmailError', "EMAIL_ERROR",
+          { message: 'There was a problem with your email.' }
+    )
+  }
 }

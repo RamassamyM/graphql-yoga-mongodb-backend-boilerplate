@@ -27,6 +27,7 @@ export default function () {
     subscriptions: SUBSCRIPTION_ENDPOINT,
     playground: PLAYGROUND_ENDPOINT,
     debug: GRAPHQL_DEBUG || false,
+    tracing: GRAPHQL_DEBUG || false,
     // https: {
     //   cert: CERT,
     //   key: KEY,
@@ -57,6 +58,6 @@ export default function () {
 
   server.express.use(helmet())
   server.express.use(morgan('dev'))
-  server.start(serverOptions, ({ port }) => console.log(`API Server is running on port ${port} at ${PUBLIC_URL}${GRAPHQL_ENDPOINT}`))
+  server.start(serverOptions, ({ port }) => console.log(`🚀 API Server is running on port ${port} at ${PUBLIC_URL}${GRAPHQL_ENDPOINT}`))
   // console.log(`API Subscriptions server is now running on ${subscriptionsEndpoint}`)
 }

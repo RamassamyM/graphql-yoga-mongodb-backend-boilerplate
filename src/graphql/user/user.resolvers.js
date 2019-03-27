@@ -1,10 +1,8 @@
 // import { GraphQLScalarType } from 'graphql'
 // import moment from 'moment'
 import User from '../../models/user.model'
-import errors from './user.errors'
-// import { errorHandlerWrapper } from '../utils/errorHandlerWrapper'
+import { WrongCredentialsError, EmailError } from './user.errors'
 import getRandomAvatarColor from '../utils/getRandomAvatarColor'
-import { ApolloError } from 'apollo-server-errors'
 
 export default {
   Query: {
@@ -20,7 +18,7 @@ export default {
       try {
         const userWithSameEmailInDB = await User.findOne({ email })
         if (userWithSameEmailInDB) {
-          throw new errors.EmailError()
+          throw new EmailError()
         }
         return User.create({ email })
       } catch (err) {
@@ -37,7 +35,9 @@ export default {
     },
     async login (_, { email, password }) {
       const { token, user } = await User.authenticate(email, password)
-      if (!token || !user) { throw new errors.WrongCredentialsError() }
+      if (!token || !user) {
+         throw new WrongCredentialsError()
+      }
       return { token, user }
     },
     async editUser (_, params) {

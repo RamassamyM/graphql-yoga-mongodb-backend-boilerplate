@@ -82,11 +82,11 @@ schema.statics.authenticate = async (email, password) => {
 
 schema.statics.delete = async ({ _id, password }) => {
   try {
-    const user = await User.findOne({ _id})
-    if (!user) {
+    const userToDelete = await User.findOne({ _id})
+    if (!userToDelete) {
       throw new Error('There was a problem with this user')
     }
-    const isValidPassword = await comparePassword(password, user.password)
+    const isValidPassword = await comparePassword(password, userToDelete.password)
     if (!isValidPassword) {
       throw new Error('There was a problem while trying to delete the user')
     }
@@ -94,7 +94,7 @@ schema.statics.delete = async ({ _id, password }) => {
     if (!deletedUser) {
       throw new Error('Error while trying to delete the user')
     }
-    return user
+    return { user: userToDelete, confirmed: true }
   } catch (err) {
     throw err
   }

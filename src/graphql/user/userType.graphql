@@ -16,10 +16,15 @@ type Query {
   user(_id: String!): User
 }
 
+type Confirmation {
+  confirmed: Boolean
+  user: User
+}
+
 type Mutation {
   captureEmail(email: String!): User
   signup(_id: String!, firstname: String!, lastname: String!, password: String!): AuthPayload!
   login(email: String!, password: String!): AuthPayload!
   editUser(_id: String!, firstname: String, lastname: String): User
-  deleteUser(_id: String!, password: String!): User
+  deleteUser(_id: String!, password: String!): Confirmation
 }
