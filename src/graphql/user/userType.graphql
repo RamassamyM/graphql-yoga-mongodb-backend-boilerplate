@@ -1,0 +1,25 @@
+type User {
+  _id: String
+  firstname: String
+  lastname: String
+  email: String
+  avatarColor: String
+}
+
+type AuthPayload {
+  token: String!
+  user: User
+}
+
+type Query {
+  users: [User]
+  user(_id: String!): User
+}
+
+type Mutation {
+  captureEmail(email: String!): User
+  signup(_id: String!, firstname: String!, lastname: String!, password: String!): AuthPayload!
+  login(email: String!, password: String!): AuthPayload!
+  editUser(_id: String!, firstname: String, lastname: String): User
+  deleteUser(_id: String!, password: String!): User
+}

@@ -1,0 +1,23 @@
+enum AllowedStatus {
+  Pending
+  Finished
+  Started
+}
+
+type Query {
+  test: String
+  getExempleObjects: [ExempleObject]
+}
+
+type ExempleObject {
+  _id: String!
+  name: String!
+  """
+  Description for **field** status to document the api : [markdown](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) syntax enable !
+  """
+  status: AllowedStatus
+}
+
+type Mutation {
+  createExempleObject(name: String!, status: AllowedStatus): ExempleObject
+}
