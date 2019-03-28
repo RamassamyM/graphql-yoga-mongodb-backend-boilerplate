@@ -1,5 +1,5 @@
 type User {
-  _id: String
+  _id: ID
   firstname: String
   lastname: String
   email: String
@@ -13,7 +13,8 @@ type AuthPayload {
 
 type Query {
   users: [User]
-  user(_id: String!): User
+  user(_id: ID!): User
+  me: User
 }
 
 type Confirmation {
@@ -23,8 +24,9 @@ type Confirmation {
 
 type Mutation {
   captureEmail(email: String!): User
-  signup(_id: String!, firstname: String!, lastname: String!, password: String!): AuthPayload!
+  signup(_id: ID!, firstname: String!, lastname: String!, password: String!): AuthPayload!
   login(email: String!, password: String!): AuthPayload!
-  editUser(_id: String!, firstname: String, lastname: String): User
-  deleteUser(_id: String!, password: String!): Confirmation
+  editUser(_id: ID!, firstname: String, lastname: String): User
+  deleteUserWithPassword(_id: ID!, password: String!): Confirmation
+  deleteUser(_id: ID!): User
 }

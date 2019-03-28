@@ -29,10 +29,10 @@ const schema = new mongoose.Schema({
   },
 }, { timestamps: true })
 
-schema.statics.signup = async (id, firstname, lastname, password, avatarColor) => {
+schema.statics.signup = async (_id, firstname, lastname, password, avatarColor) => {
   try {
     const userPromise = new Promise(async function (resolve, reject) {
-      const foundUser = await User.findById(id)
+      const foundUser = await User.findById(_id)
       if (!foundUser) {
         reject(new Error('There was a problem whith the user'))
       } else {
@@ -53,7 +53,7 @@ schema.statics.signup = async (id, firstname, lastname, password, avatarColor) =
     const [user, hashedPassword] = await Promise.all([userPromise, passwordPromise])
     await user.set({ password: hashedPassword, avatarColor, firstname, lastname, isSignedUp: true })
     await user.save()
-    const token = await generateToken({ id: user.id, email: user.email })
+    const token = await generateToken({ _id: user._id })
     return { token, user }
   } catch (err) {
     throw err
@@ -73,16 +73,16 @@ schema.statics.authenticate = async (email, password) => {
       throw new Error('There was a problem with your password')
     }
     // assign the user a token
-    const token = await generateToken({ id: user.id, email: user.email })
+    const token = await generateToken({ _id: user._id })
     return { token, user }
   } catch (err) {
     throw err
   }
 }
 
-schema.statics.delete = async ({ _id, password }) => {
+schema.statics.deleteWithPassword = async ({ _id, password }) => {
   try {
-    const userToDelete = await User.findOne({ _id})
+    const userToDelete = await User.findOne({ _id })
     if (!userToDelete) {
       throw new Error('There was a problem with this user')
     }

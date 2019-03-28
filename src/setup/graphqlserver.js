@@ -3,6 +3,8 @@ import { GraphQLServer } from 'graphql-yoga'
 import schema from '../graphql/schema'
 import morgan from 'morgan'
 import helmet from 'helmet'
+import getTokenAndCurrentUser from './utils/getTokenAndCurrentUser'
+import { logRequest, logResponse } from './utils/debugLogger'
 // import NoIntrospection from 'graphql-disable-introspection'
 // import passport from 'passport'
 // import compression from 'compression'
@@ -37,21 +39,27 @@ export default function () {
     //   return error
     // },
     formatResponse: response => {
-      if (GRAPHQL_DEBUG) {
-        console.log('Response: ')
-        console.log(response)
-      }
+      logResponse(response)
       return response
     },
   }
   const server = new GraphQLServer({
     schema,
-    context: ({ request, response }) => {
-      if (GRAPHQL_DEBUG) {
-        console.log('\n' + request.method + ' ' + request.url + ' - referer: ' + request.headers.referer + '\n ' + request.body.query)
-        console.log(request.body.variables)
-      }
-      return { request, response }
+    playground: {
+      settings: {
+        'editor.theme': 'light',
+      },
+      tabs: [
+        // {
+        //   endpoint,
+        //   query: defaultQuery,
+        // },
+      ],
+    },
+    context: async ({ request, response }) => {
+      logRequest(request)
+      const { authToken, currentUser } = await getTokenAndCurrentUser(request)
+      return { request, response, currentUser }
     },
     // validationRules: [NoIntrospection], // TODO change the library to get it working with Apollo-server
   })

@@ -57,12 +57,25 @@ Code is modularized in `src` directory:
 - There is also a `utils` folder to create utility functions in js files to be used by various files in the project.  
 - **Code architecture design choice** : As graphql typedefs are like routes of a router, and resolvers are like controllers to define actions with the routes, we put all model logic in the models like in MVC paradigm and not in resolvers.
 
-###### Security, authentication
+###### Security, authentication, authorization
 - git is used with a .gitignore : .env file is ignored and contains secret environment variables : you have to recreate yours. [Dotenv](https://www.npmjs.com/package/dotenv) package is used to grab the environment variables from .env file. [Cross-env](https://www.npmjs.com/package/cross-env) package is used to start server giving variables in command line (ex : for production)
 - Authentication with node and graphql is not that easy as there is not any plataformec/device like complete package that exists. So this is a part to consider. Read these posts first : [1](https://hackernoon.com/your-node-js-authentication-tutorial-is-wrong-f1a3bf831a46) [2](https://github.com/P-H-C/phc-winner-argon2) [3](https://www.howtographql.com/advanced/4-security/) [4](https://expressjs.com/fr/advanced/best-practice-security.html) [5](https://www.codeheroes.fr/index.php/2018/03/23/securiser-une-api-rest/)
-- uses `passport` for authentication with
+- uses `passport` for authentication with... TODO
+- Note : specs for authentication and authorization ([read](https://medium.com/the-guild/authentication-and-authorization-in-graphql-and-how-graphql-modules-can-help-fadc1ee5b0c2)) : 
+We learned that a good implementation for GraphQL **authentication** has the following features regarding authentication:
 
-- different security protections with [helmet](https://www.npmjs.com/package/helmet), express-rate-limit (todo), express-brute(todo), csurf(todo)
+Your authentication implementation should eventually provide the currentUser to the resolvers
+Your resolvers should not know about the authentication logic (separation between the business logic and the authentication logic)
+You wish to protect only parts of your GraphQL schema, and not all of it.
+You want to be able to authenticate parts of your schema, on a field level.
+
+And the following features regarding **authorization**:
+
+You wish to protect some fields, according to custom rules.
+You wish to run custom logics that protects parts of your GraphQL schema.
+Our custom rules should not be coupled to a specific resolver.
+
+- Security concerns : different security protections with [helmet](https://www.npmjs.com/package/helmet), express-rate-limit (todo), express-brute(todo), csurf(todo)
 
 ###### Other tools
 - Sending emails with `nodemailer`
