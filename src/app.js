@@ -4,7 +4,6 @@ import setupGraphqlServer from './setup/graphqlserver'
 
 async function main () {
   await setupDatabase()
-  // await setupPassport()
   await setupGraphqlServer()
 }
 
